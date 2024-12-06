@@ -5,74 +5,54 @@ import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
-import { Box } from '@mui/material';
-// import 'leaflet-geometryutil';
-
-// declare module 'leaflet' {
-//   namespace GeometryUtil {
-//     function geodesicArea(latlngs: L.LatLng[]): number;
-//   }
-// }
-
+import { Box, Button, Toolbar } from '@mui/material';
+import { LatLngExpression, LatLngBoundsExpression } from 'leaflet';
+import { text } from 'stream/consumers';
+const position: LatLngExpression = [51.505, -0.09];
+type ACTION_NAMES = 'cancel' | 'save' | 'edit';
+type Action = {
+  text: string;
+  title?: string;
+  onclick?: () => void;
+};
+// const actions: (L.PM.ACTION_NAMES | L.PM.Action)[] = [
+//   'cancel',
+//   {
+//     text: 'Click Me',
+//     onclick: () => {
+//       console.log('Clicked');
+//       alert('You clicked the custom button!');
+//     },
+//   },
+// ];
 export function LeafletComponenet1() {
-  // const [polygon, setPolygon] = useState<L.Polygon | null>(null);
-  // const [tooltip, setTooltip] = useState<L.Tooltip | null>(null);
+  const point: [number, number][] = [
+    [51.505, -0.09],
+    [51.515, -0.1],
+    [63.674, -49.674],
+    [42.674, -49.674],
+    [35.674, -49.674],
+  ];
+  const rectangle: LatLngBoundsExpression = [
+    [51.49, -0.08],
+    [51.5, -0.06],
+  ];
+  const [points, setPoints] = useState<[number, number][]>([]);
+  // const [map, setMap] = useState<L.Map | null>(null);
 
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-  //     const map = L.map('map').setView([51.505, -0.09], 13);
-  //     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(
-  //       map
-  //     );
+  const actions: (ACTION_NAMES | Action)[] = [
+    'cancel',
+    'edit',
 
-  //     if (map.pm) {
-  //       map.pm.addControls();
-  //       map.pm.enableDraw('Polygon', {
-  //         snappable: true,
-  //         snapDistance: 20,
-  //       });
-  //     } else {
-  //       console.error('Geoman нь ачаалагдаагүй байна');
-  //     }
-
-  //     //     map.on('pm:create', (e: any) => {
-  //     //       const drawPolygon = e.layer as L.Polygon;
-  //     //       setPolygon(drawPolygon);
-
-  //     //       const latlngs = drawPolygon.getLatLngs();
-  //     //       const flatLatLngs = latlngs.flat(2);
-
-  //     //       if (L && L.GeometryUtil && L.GeometryUtil.geodesicArea) {
-  //     //         const area = L.GeometryUtil.geodesicArea(flatLatLngs);
-  //     //         const areaText = `Талбай: ${area.toFixed(2)} м²`;
-
-  //     //         drawPolygon
-  //     //           .bindTooltip(areaText, {
-  //     //             permanent: true,
-  //     //             direction: 'top',
-  //     //             className: 'leaflet-tooltip',
-  //     //           })
-  //     //           .openTooltip();
-
-  //     //         drawPolygon.on('mouseover', () => {
-  //     //           const area = L.GeometryUtil.geodesicArea(flatLatLngs);
-  //     //           const areaText = `Талбай: ${area.toFixed(2)} м²`;
-  //     //           drawPolygon.bindTooltip(areaText).openTooltip();
-  //     //         });
-
-  //     //         drawPolygon.on('mouseout', () => {
-  //     //           drawPolygon.closeTooltip();
-  //     //         });
-  //     //       } else {
-  //     //         console.error('L.GeometryUtil нь байхгүй байна');
-  //     //       }
-  //     //     });
-
-  //     return () => {
-  //       map.remove();
-  //     };
-  //   }
-  // }, []);
+    {
+      text: 'Display text on hover button',
+      title: 'Display text on hover button',
+      onclick: () => {
+        console.log('click');
+        alert('click');
+      },
+    },
+  ];
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -80,15 +60,45 @@ export function LeafletComponenet1() {
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(
         map
       );
-      if (map.pm) {
-        map.pm.addControls();
-        map.pm.enableDraw('Polygon', {
-          snappable: true,
-          snapDistance: 20,
-        });
-      } else {
-        console.error('Geoman ');
-      }
+      map.pm.addControls({
+        position: 'topleft',
+        drawControls: false,
+        editControls: true,
+        optionsControls: true,
+        customControls: true,
+        oneBlock: false,
+      });
+
+      const circle = L.circle([51.505, -0.09], {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        radius: 500,
+      }).addTo(map);
+      circle.bindPopup('I am a circle.');
+      map.pm.addControls({
+        drawControls: true,
+        editControls: false,
+        optionsControls: true,
+        customControls: true,
+        oneBlock: false,
+      });
+      const marker = L.marker([51.505, -0.09], {
+        icon: new L.Icon({
+          iconUrl: '/image/leaf-orange.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+        }),
+      }).addTo(map);
+      marker.bindPopup('I am a marker.').openPopup();
+
+      // map.pm.Toolbar.copyDrawControl('draw-polygon', {
+      //   name: 'CustomControl',
+      //   block: 'custom',
+      //   title: 'Custom Control Title',
+      //   actions: actions,
+      // });
+      // map.pm.Toolbar.changeActionsOfControl("Rectangle", actions);
 
       map.on('pm:create', (e) => {
         const layer = e.layer;
@@ -165,12 +175,54 @@ export function LeafletComponenet1() {
         }
         map.pm.enableGlobalRemovalMode(); // устгах үйлдлийг маф руу шилжүүлэх
       });
+      map.pm.enableGlobalRemovalMode(); // устгах үйлдлийг маф руу шилжүүлэх
 
       return () => {
         map.remove();
       };
     }
   }, []);
+  // const handlePoint = () => {
+  //   if (map) {
+  //     // Create a marker
+  //     const marker = L.marker([51.505, -0.09], {
+  //       icon: new L.Icon({
+  //         iconUrl: '/image/leaf-orange.png',
+  //         iconSize: [25, 41],
+  //         iconAnchor: [12, 41],
+  //       }),
+  //     });
 
-  return <Box id="map" sx={{ height: '100vh', width: '100%' }}></Box>;
+  //     // Add the marker to the map
+  //     marker.addTo(map);
+
+  //     // Bind popup to the marker
+  //     marker
+  //       .bindPopup('A pretty CSS3 popup. <br /> Easily customizable.')
+  //       .openPopup();
+  //   } else {
+  //     console.log('Map is not initialized');
+  //   }
+  // };
+
+  // const handlePoint = () => {
+  //   const marker = L.marker([51.505, -0.09], {
+  //     icon: new L.Icon({
+  //       iconUrl: '/image/leaf-orange.png',
+  //       iconSize: [25, 41],
+  //       iconAnchor: [12, 41],
+  //     }),
+  //   });
+  //   console.log('marker', marker);
+  //   marker.bindPopup('A pretty CSS3 popup. <br /> Easily customizable.');
+  // };
+
+  return (
+    <Box>
+      {/* <Toolbar>
+        <Button onClick={handlePoint}>Point</Button>
+      </Toolbar> */}
+      <Box sx={{ height: '100vh', width: '100%' }} id="map"></Box>
+    </Box>
+  );
 }
