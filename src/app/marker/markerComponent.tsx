@@ -15,7 +15,7 @@ export function MarkerComponent(props: MarkerComponentProps) {
     if (marker) {
       const createdMarker = L.marker([51.505, -0.09], {
         icon: L.icon({
-          iconUrl: './image/leaf-orange.png',
+          iconUrl: './map-icons/001.svg',
           iconSize: [40, 80],
           className: 'flipped-icon1',
         }),

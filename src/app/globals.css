@@ -84,8 +84,14 @@ a {
   transform: rotateY(180deg);
 }
 
-.flipped-icon {
+/* .flipped-icon {
   transform: translate3d(1002px, 689px, 0px) scaleX(1) scaleY(-1) !important
+} */
+
+.flipped-icon {
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
+  /* transform : 'rotateX(-180deg)';  */
 }
 .flipped-icon :hover  {
   transform: translate3d(1002px, 689px, 87px) scaleX(1) scaleY(-1) !important

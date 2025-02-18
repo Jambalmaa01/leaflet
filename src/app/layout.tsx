@@ -5,6 +5,8 @@ import { Roboto } from 'next/font/google';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
+import {QueryProvider} from '@/lib/query/provider';
+import {TRPCProvider} from '@/lib/trpc/provider'
 import './globals.css';
 
 const roboto = Roboto({
@@ -22,7 +24,11 @@ export default function RootLayout(props: any) {
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            {children}
+            <TRPCProvider>
+              <QueryProvider>
+              {children}
+              </QueryProvider>
+            </TRPCProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

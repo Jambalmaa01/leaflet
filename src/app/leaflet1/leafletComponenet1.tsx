@@ -25,7 +25,7 @@ type Action = {
 //     },
 //   },
 // ];
-export function LeafletComponenet1() {
+  export function LeafletComponenet1() {
   const point: [number, number][] = [
     [51.505, -0.09],
     [51.515, -0.1],
@@ -40,19 +40,19 @@ export function LeafletComponenet1() {
   const [points, setPoints] = useState<[number, number][]>([]);
   // const [map, setMap] = useState<L.Map | null>(null);
 
-  const actions: (ACTION_NAMES | Action)[] = [
-    'cancel',
-    'edit',
+  // const actions: (ACTION_NAMES | Action)[] = [
+  //   'cancel',
+  //   'edit',
 
-    {
-      text: 'Display text on hover button',
-      title: 'Display text on hover button',
-      onclick: () => {
-        console.log('click');
-        alert('click');
-      },
-    },
-  ];
+  //   {
+  //     text: 'Display text on hover button',
+  //     title: 'Display text on hover button',
+  //     onclick: () => {
+  //       console.log('click');
+  //       alert('click');
+  //     },
+  //   },
+  // ];
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -62,35 +62,45 @@ export function LeafletComponenet1() {
       );
       map.pm.addControls({
         position: 'topleft',
-        drawControls: false,
+        drawControls: true,
         editControls: true,
         optionsControls: true,
         customControls: true,
         oneBlock: false,
       });
 
-      const circle = L.circle([51.505, -0.09], {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.5,
-        radius: 500,
-      }).addTo(map);
-      circle.bindPopup('I am a circle.');
-      map.pm.addControls({
-        drawControls: true,
-        editControls: false,
-        optionsControls: true,
-        customControls: true,
-        oneBlock: false,
-      });
-      const marker = L.marker([51.505, -0.09], {
-        icon: new L.Icon({
-          iconUrl: '/image/leaf-orange.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-        }),
-      }).addTo(map);
-      marker.bindPopup('I am a marker.').openPopup();
+      // const circle = L.circle([51.505, -0.09], {
+      //   color: 'red',
+      //   fillColor: '#f03',
+      //   fillOpacity: 0.5,
+      //   radius: 500,
+      // }).addTo(map);
+      // circle.bindPopup('I am a circle.');
+      // map.pm.addControls({
+      //   drawControls: true,
+      //   editControls: false,
+      //   optionsControls: true,
+      //   customControls: true,
+      //   oneBlock: false,
+      // });
+
+      // const marker = L.marker([51.505, -0.09], {
+      //   icon: new L.Icon({
+      //     iconUrl: '/image/leaf-orange.png',
+      //     iconSize: [25, 41],
+      //     iconAnchor: [12, 41],
+      //   }),
+      // }).addTo(map);
+      // marker.on('click', ()=>{
+      //   const markerElement = marker.getElement()
+      //   // marker.bindPopup('I am a marker.').openPopup();
+      //   if(markerElement){
+      //     markerElement.style.transition = 'transform 1s';
+      //     markerElement.style.transformOrigin = 'center center';
+      //     markerElement.style.transform = 'translate3d(630px, 418px, 0px) rotate(-180deg)'
+
+      //   }
+      // })
 
       // map.pm.Toolbar.copyDrawControl('draw-polygon', {
       //   name: 'CustomControl',
@@ -100,82 +110,82 @@ export function LeafletComponenet1() {
       // });
       // map.pm.Toolbar.changeActionsOfControl("Rectangle", actions);
 
-      map.on('pm:create', (e) => {
-        const layer = e.layer;
-        if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
-          //instanceof удамшиж байгаа эсэхийг шаалтана
-          const lanlng = layer.getLatLngs(); //координатыг авах
+      // map.on('pm:create', (e) => {
+      //   const layer = e.layer;
+      //   if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
+      //     //instanceof удамшиж байгаа эсэхийг шаалтана
+      //     const lanlng = layer.getLatLngs(); //координатыг авах
 
-          if (lanlng && lanlng.length > 0 && Array.isArray(lanlng[0])) {
-            const coordinatesList = lanlng
-              .map((polygon, index) => {
-                if (Array.isArray(polygon)) {
-                  return polygon
-                    .map((point) => {
-                      if (point instanceof L.LatLng) {
-                        return `Polygon ${index + 1}: (${point.lat.toFixed(
-                          2
-                        )}, ${point.lng.toFixed(2)})`; // координатыг 2 оронтой харуулна
-                      }
+      //     if (lanlng && lanlng.length > 0 && Array.isArray(lanlng[0])) {
+      //       const coordinatesList = lanlng
+      //         .map((polygon, index) => {
+      //           if (Array.isArray(polygon)) {
+      //             return polygon
+      //               .map((point) => {
+      //                 if (point instanceof L.LatLng) {
+      //                   return `Polygon ${index + 1}: (${point.lat.toFixed(
+      //                     2
+      //                   )}, ${point.lng.toFixed(2)})`; // координатыг 2 оронтой харуулна
+      //                 }
 
-                      return '';
-                    })
-                    .join('<br>'); //string ийг массив руу хөрвүүлэх
-                } else {
-                  return `Polygon ${index + 1}: (${polygon.lat.toFixed(5)})`;
-                }
-              })
-              .join('<br>');
+      //                 return '';
+      //               })
+      //               .join('<br>'); //string ийг массив руу хөрвүүлэх
+      //           } else {
+      //             return `Polygon ${index + 1}: (${polygon.lat.toFixed(5)})`;
+      //           }
+      //         })
+      //         .join('<br>');
 
-            console.log('latlng', lanlng);
-            const popupContent = `<b>Координат:</b><br>${coordinatesList}`;
+      //       console.log('latlng', lanlng);
+      //       const popupContent = `<b>Координат:</b><br>${coordinatesList}`;
 
-            layer.bindPopup(popupContent).openPopup();
-          }
-        } else if (layer instanceof L.Rectangle) {
-          const bounds = layer.getBounds();
-          const conner1 = bounds.getSouthWest();
-          const conner2 = bounds.getNorthEast();
-          const coordinatesList = `Rectangle: (
-           ${conner1.lat.toFixed(2)},
-           ${conner1.lng.toFixed(2)}, to
-           ${conner2.lat.toFixed(2)},
-           ${conner2.lng.toFixed(2)}
-           )`;
-          const popupContent = `<b>Координат:</b><br>${coordinatesList}`;
-          layer.bindPopup(popupContent).openPopup();
-        } else if (layer instanceof L.Circle) {
-          const center = layer.getLatLng();
-          const raduis = layer.getRadius();
-          const coordinatesList = `Circle:(
-          ${center.lat.toFixed(2)},
-          ${center.lng.toFixed(2)},
-          ${raduis.toFixed(2)} meter )`;
-          const popupContent = ` <b>Координат:</b> <br> ${coordinatesList} `;
-          layer.bindPopup(popupContent).openPopup();
-        } else if (layer instanceof L.Marker) {
-          const latlng = layer.getLatLng();
-          const coordinatesList = `Marker: (${latlng.lat.toFixed(
-            2
-          )}, ${latlng.lng.toFixed(2)})`;
-          const popupContent = `<b>Координат:</b> <br> ${coordinatesList} </b>`;
-          layer.bindPopup(popupContent).openPopup();
-        } else if (layer instanceof L.CircleMarker) {
-          const latIng = layer.getLatLng();
-          const radius = layer.getRadius();
-          const coordinatesList = `CircleMarker: <br> (x: ${latIng.lat.toFixed(
-            2
-          )}, <br> y: ${latIng.lng.toFixed(2)} , <br> radius: ${radius.toFixed(
-            2
-          )} ) `;
-          const popupContent = `<b>Координат:</b> <br> ${coordinatesList} </b>`;
-          layer.bindPopup(popupContent).openPopup();
-        } else {
-          console.error('layer нь байхгүй байна');
-        }
-        map.pm.enableGlobalRemovalMode(); // устгах үйлдлийг маф руу шилжүүлэх
-      });
-      map.pm.enableGlobalRemovalMode(); // устгах үйлдлийг маф руу шилжүүлэх
+      //       layer.bindPopup(popupContent).openPopup();
+      //     }
+      //   } else if (layer instanceof L.Rectangle) {
+      //     const bounds = layer.getBounds();
+      //     const conner1 = bounds.getSouthWest();
+      //     const conner2 = bounds.getNorthEast();
+      //     const coordinatesList = `Rectangle: (
+      //      ${conner1.lat.toFixed(2)},
+      //      ${conner1.lng.toFixed(2)}, to
+      //      ${conner2.lat.toFixed(2)},
+      //      ${conner2.lng.toFixed(2)}
+      //      )`;
+      //     const popupContent = `<b>Координат:</b><br>${coordinatesList}`;
+      //     layer.bindPopup(popupContent).openPopup();
+      //   } else if (layer instanceof L.Circle) {
+      //     const center = layer.getLatLng();
+      //     const raduis = layer.getRadius();
+      //     const coordinatesList = `Circle:(
+      //     ${center.lat.toFixed(2)},
+      //     ${center.lng.toFixed(2)},
+      //     ${raduis.toFixed(2)} meter )`;
+      //     const popupContent = ` <b>Координат:</b> <br> ${coordinatesList} `;
+      //     layer.bindPopup(popupContent).openPopup();
+      //   } else if (layer instanceof L.Marker) {
+      //     const latlng = layer.getLatLng();
+      //     const coordinatesList = `Marker: (${latlng.lat.toFixed(
+      //       2
+      //     )}, ${latlng.lng.toFixed(2)})`;
+      //     const popupContent = `<b>Координат:</b> <br> ${coordinatesList} </b>`;
+      //     layer.bindPopup(popupContent).openPopup();
+      //   } else if (layer instanceof L.CircleMarker) {
+      //     const latIng = layer.getLatLng();
+      //     const radius = layer.getRadius();
+      //     const coordinatesList = `CircleMarker: <br> (x: ${latIng.lat.toFixed(
+      //       2
+      //     )}, <br> y: ${latIng.lng.toFixed(2)} , <br> radius: ${radius.toFixed(
+      //       2
+      //     )} ) `;
+      //     const popupContent = `<b>Координат:</b> <br> ${coordinatesList} </b>`;
+      //     layer.bindPopup(popupContent).openPopup();
+      //   } else {
+      //     console.error('layer нь байхгүй байна');
+      //   }
+      //   // map.pm.enableGlobalRemovalMode(); // устгах үйлдлийг маф руу шилжүүлэх
+      // });
+      // map.pm.enableGlobalRemovalMode(); // устгах үйлдлийг маф руу шилжүүлэх
 
       return () => {
         map.remove();

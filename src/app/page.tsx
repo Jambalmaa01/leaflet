@@ -8,6 +8,9 @@ import dynamic from 'next/dynamic';
 import './page.module.css';
 import { ArtistMenuList } from './test';
 import { MenuArtist } from './test/menu';
+import {CategoryAddForm} from '../components/screens/category/CategoryScreen'
+import { AuthSignInScreen } from '@/components/screens/auth-sign-in';
+import { LeafletLineComponenet } from './leaflet1/test/leafletLine';
 const LeafletComponenet1 = dynamic(
   () =>
     import('./leaflet1/leafletComponenet1').then(
@@ -16,10 +19,10 @@ const LeafletComponenet1 = dynamic(
   { ssr: false }
 );
 
-export default function Home() {
+   export default function Home() {
   return (
     <>
-      <MenuArtist />
+      <LeafletLineComponenet />
     </>
   );
 }

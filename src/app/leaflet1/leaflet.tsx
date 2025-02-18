@@ -46,6 +46,8 @@ export function Leaflet() {
   const [polygon, setPolygon] = useState(false);
   const [polyline, setPolyline] = useState(false);
   const [marker, setMarker] = useState(false);
+  const [rotationX, setRotationX] = useState(0);
+  const [rotationY, setRotationY] = useState(0);
   function onPoint() {
     setPoint((point) => !point);
   }
@@ -57,6 +59,12 @@ export function Leaflet() {
   }
   function onMarker() {
     setMarker((marker) => !marker);
+  }
+  function onX() {
+    setRotationX((prev) => prev + 180); 
+  }
+  function onY() {
+    setRotationY((prev) => prev + 180); 
   }
 
   return (
@@ -72,14 +80,14 @@ export function Leaflet() {
         </Button>
         {point && (
           <Toolbar>
-            <Button>X</Button>
-            <Button>Y</Button>
+            <Button onClick={onX}>X</Button>
+            <Button  onClick={onY}>Y</Button>
           </Toolbar>
         )}
       </Toolbar>
       <MapContainer
         center={position}
-        zoom={13}
+        zoom={14}
         scrollWheelZoom={false}
         style={{ height: 'calc(100vh - 64px)', width: '100%' }}
       >
@@ -87,8 +95,11 @@ export function Leaflet() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <PointComponent point={point} />
-        <PolygonComponent polygon={polygon} />
+        <PointComponent 
+        point={point} 
+        rotationX={rotationX} rotationY={rotationY}
+         />
+        <PolygonComponent polygon={polygon} /> 
         <LineComponent polyline={polyline} />
         <MarkerComponent marker={marker} />
         <TestComponent />
